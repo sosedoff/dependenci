@@ -1,6 +1,6 @@
 # Dependenci
 
-TODO: Write a gem description
+API wrapper for [Dependenci Service](http://dependenci.com)
 
 ## Installation
 
@@ -18,7 +18,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'dependenci'
+
+status = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
+status = Dependenci.npm(package_json)
+```
+
+Example output:
+
+```
+{"runtime"=>
+  [{"name"=>"coffee-script",
+    "required"=>"1.6.2",
+    "locked"=>nil,
+    "status"=>"ok",
+    "latest"=>"1.6.2"},
+   {"name"=>"optparse",
+    "required"=>"1.0.4",
+    "locked"=>nil,
+    "status"=>"ok",
+    "latest"=>"1.0.4"},
+   {"name"=>"scoped-http-client",
+    "required"=>"0.9.8",
+    "locked"=>nil,
+    "status"=>"ok",
+    "latest"=>"0.9.8"},
+   {"name"=>"log",
+    "required"=>"1.3.1",
+    "locked"=>nil,
+    "status"=>"ok",
+    "latest"=>"1.3.1"},
+   {"name"=>"express",
+    "required"=>"3.1.1",
+    "locked"=>nil,
+    "status"=>"update",
+    "latest"=>"3.2.0"}]}
+```
 
 ## Contributing
 
