@@ -1,7 +1,5 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'dependenci/version'
+require File.expand_path('../lib/dependenci/version', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "dependenci"
@@ -10,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["dan.sosedoff@gmail.com"]
   spec.description   = %q{API wrapper for dependenci.com}
   spec.summary       = %q{API wrapper for dependenci.com}
-  spec.homepage      = ""
+  spec.homepage      = "http://dependenci.com"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
