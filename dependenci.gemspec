@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Dependenci::VERSION
   spec.authors       = ["Dan Sosedoff"]
   spec.email         = ["dan.sosedoff@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{API wrapper for dependenci.com}
+  spec.summary       = %q{API wrapper for dependenci.com}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -17,6 +17,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
+
+  spec.add_runtime_dependency "faraday", "~> 0.8"
+  spec.add_runtime_dependency "json",    "~> 1.7"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
