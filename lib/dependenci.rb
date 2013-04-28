@@ -9,7 +9,7 @@ module Dependenci
   # gemspec      - Contents of *.gemspec file (optional)
   # 
   # Returns a hash with status result
-  def self.rubygems(gemfile, gemfile_lock=nil, gemspec=nil)
+  def self.rubygems(gemfile=nil, gemfile_lock=nil, gemspec=nil)
     opts = {
       gemfile:      gemfile,
       gemfile_lock: gemfile_lock,
