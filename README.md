@@ -56,6 +56,14 @@ Example output:
     "latest"=>"3.2.0"}]}
 ```
 
+General dependency structure:
+
+- `name`     - Package name
+- `status`   - Dependency status
+- `required` - Required versions
+- `locked`   - Locked version
+- `url`      - Package URL (rubygems or npm)
+
 ## Contributing
 
 1. Fork it
