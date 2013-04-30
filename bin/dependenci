@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'terminal_helpers'
+#!/usr/bin/env ruby
+
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+
+require 'faraday'
+require 'json'
+require 'terminal_helpers'
+require 'dependenci'
+
+def print_result(result)
+  if result['status']
+    status = result.delete('status')
+    color  = status == 'ok' ? :green : :yellow
+
+    puts "\nDependency status: #{status.upcase.send(color)}\n\n"
+  end
+
+  result.each_pair do |group, deps|
+    puts "#{group.upcase}\n"
+
+    deps.each do |d|
+      status = d['status']
+      color  = status == 'ok' ? :green : :yellow
+
+      msg = " * [#{status.upcase.send(color)}] #{d['name']} #{d['required']}"
+    
+      unless status == 'ok'
+        msg << " ("
+        msg << " locked #{d['locked']} " if d['locked']
+        msg << " latest #{d['latest']} )"
+      end
+
+      puts msg
+    end
+
+    puts
+  end
+end
+
+include TerminalHelpers
+
+dir = File.expand_path(ARGV.shift)
+
+gemfile      = File.read(File.join(dir, 'Gemfile'))
+gemfile_lock = File.read(File.join(dir, 'Gemfile.lock')) rescue ''
+gemspec      = File.read(File.join(dir, "#{File.basename(dir)}.gemspec")) rescue ''
+
+data = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
+print_result(data)
