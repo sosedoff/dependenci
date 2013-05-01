@@ -11,6 +11,8 @@ require 'json'
 require 'terminal_helpers'
 require 'dependenci'
 
+include TerminalHelpers
+
 def print_result(result)
   if result['status']
     status = result.delete('status')
@@ -41,13 +43,30 @@ def print_result(result)
   end
 end
 
-include TerminalHelpers
+def run_rubygems(dir)
+  gemfile      = File.read(File.join(dir, 'Gemfile'))
+  gemfile_lock = File.read(File.join(dir, 'Gemfile.lock')) rescue ''
+  gemspec      = File.read(File.join(dir, "#{File.basename(dir)}.gemspec")) rescue ''
+
+  data = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
+  print_result(data)
+end
+
+def run_npm(dir)
+  package_json = File.read(File.join(dir, 'package.json'))
+  data         = Dependenci.npm(package_json)
+
+  print_result(data)
+end
 
 dir = File.expand_path(ARGV.shift)
 
-gemfile      = File.read(File.join(dir, 'Gemfile'))
-gemfile_lock = File.read(File.join(dir, 'Gemfile.lock')) rescue ''
-gemspec      = File.read(File.join(dir, "#{File.basename(dir)}.gemspec")) rescue ''
+if File.exists?("#{dir}/package.json")
+  run_npm(dir)
+else
+  run_rubygems(dir)
+end
 
-data = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
-print_result(data)
+
+
+
