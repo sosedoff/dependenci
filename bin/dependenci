@@ -44,12 +44,16 @@ def print_result(result)
 end
 
 def run_rubygems(dir)
-  gemfile      = File.read(File.join(dir, 'Gemfile'))
+  gemfile      = File.read(File.join(dir, 'Gemfile')) rescue ''
   gemfile_lock = File.read(File.join(dir, 'Gemfile.lock')) rescue ''
   gemspec      = File.read(File.join(dir, "#{File.basename(dir)}.gemspec")) rescue ''
 
-  data = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
-  print_result(data)
+  if gemfile.empty? && gemfile_lock.empty? && gemspec.empty?
+    STDERR.puts "Nothing to check"
+  else
+    data = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
+    print_result(data)
+  end
 end
 
 def run_npm(dir)
