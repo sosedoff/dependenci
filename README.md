@@ -64,6 +64,17 @@ General dependency structure:
 - `locked`   - Locked version
 - `url`      - Package URL (rubygems or npm)
 
+Or use command line tool:
+
+```
+dependeci ~/myproject
+```
+
+It'll analyze what's being used and print output like this:
+
+![Screen](screenshot.png)
+
+
 ## Contributing
 
 1. Fork it
