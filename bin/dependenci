@@ -28,7 +28,7 @@ def print_result(result)
       status = d['status']
       color  = status == 'ok' ? :green : :yellow
 
-      msg = " * [#{status.upcase.send(color)}] #{d['name']} #{d['required']}"
+      msg = " * #{status.upcase.send(color)} #{d['name']} #{d['required']}"
     
       unless status == 'ok'
         msg << " ("
