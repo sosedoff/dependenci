@@ -9,6 +9,7 @@ $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 require 'faraday'
 require 'json'
 require 'terminal_helpers'
+require 'optparse'
 require 'dependenci'
 
 include TerminalHelpers
@@ -57,16 +58,36 @@ def run_rubygems(dir)
 end
 
 def run_npm(dir)
-  package_json = File.read(File.join(dir, 'package.json'))
-  data         = Dependenci.npm(package_json)
+  package_json = File.read(File.join(dir, 'package.json')) rescue ''
 
-  print_result(data)
+  if package_json.empty?
+    STDERR.puts "Nothing to check"
+  else
+    data = Dependenci.npm(package_json)
+    print_result(data)
+  end
 end
 
-dir = File.expand_path(ARGV.shift)
+options = {}
+optsparse = OptionParser.new do |o|
+  o.banner = 'Usage: dependenci PATH [options]'
+  o.on('--rubygems') { |b| options[:rubygems] = b }
+  o.on('--npm') { |b| options[:npm] = b }
+  o.on('-h', '--help') { puts o; exit }
+  o.parse!
+end
 
-if File.exists?("#{dir}/package.json")
-  run_npm(dir)
+unless path = ARGV.shift
+  puts optsparse
+  exit
+end
+
+dir = File.expand_path(path)
+
+unless options[:rubygems] || options[:npm]
+  File.exists?("#{dir}/package.json") ? run_npm(dir) : run_rubygems(dir)
 else
-  run_rubygems(dir)
+  run_npm(dir) if options[:npm]
+  run_rubygems(dir) if options[:rubygems]
 end
+
