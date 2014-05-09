@@ -16,7 +16,7 @@ require 'json'
 include TerminalHelpers
 
 def print_result(result, options = {})
-  if options[:format] = "json"
+  if options[:json]
     puts JSON.dump(result)
     return
   end
