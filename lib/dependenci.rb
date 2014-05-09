@@ -9,14 +9,15 @@ module Dependenci
   # gemspec      - Contents of *.gemspec file (optional)
   # 
   # Returns a hash with status result
-  def self.rubygems(gemfile=nil, gemfile_lock=nil, gemspec=nil)
+  #
+  def self.rubygems(gemfile = nil, gemfile_lock = nil, gemspec = nil)
     opts = {
       gemfile:      gemfile,
       gemfile_lock: gemfile_lock,
       gemspec:      gemspec
     }
 
-    client.rubygems(opts.reject { |k,v| v.nil? })
+    client.rubygems(opts.reject { |_, v| v.nil? })
   end
 
   # Get dependencies status for node.js project
@@ -24,6 +25,7 @@ module Dependenci
   # package_json - Contents of package.json file
   # 
   # Returns a hash with status result
+  #
   def self.npm(package_json)
     client.npm(package: package_json)
   end
