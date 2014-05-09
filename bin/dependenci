@@ -11,10 +11,16 @@ require 'json'
 require 'terminal_helpers'
 require 'optparse'
 require 'dependenci'
+require 'json'
 
 include TerminalHelpers
 
-def print_result(result)
+def print_result(result, options = {})
+  if options[:format] = "json"
+    puts JSON.dump(result)
+    return
+  end
+
   if result['status']
     status = result.delete('status')
     color  = status == 'ok' ? :green : :yellow
@@ -44,7 +50,7 @@ def print_result(result)
   end
 end
 
-def run_rubygems(dir)
+def run_rubygems(dir, options)
   gemfile      = File.read(File.join(dir, 'Gemfile')) rescue ''
   gemfile_lock = File.read(File.join(dir, 'Gemfile.lock')) rescue ''
   gemspec      = File.read(File.join(dir, "#{File.basename(dir)}.gemspec")) rescue ''
@@ -53,27 +59,30 @@ def run_rubygems(dir)
     STDERR.puts "Nothing to check"
   else
     data = Dependenci.rubygems(gemfile, gemfile_lock, gemspec)
-    print_result(data)
+    print_result(data, options)
   end
 end
 
-def run_npm(dir)
+def run_npm(dir, options)
   package_json = File.read(File.join(dir, 'package.json')) rescue ''
 
   if package_json.empty?
     STDERR.puts "Nothing to check"
   else
     data = Dependenci.npm(package_json)
-    print_result(data)
+    print_result(data, options)
   end
 end
 
 options = {}
 optsparse = OptionParser.new do |o|
   o.banner = 'Usage: dependenci PATH [options]'
-  o.on('--rubygems') { |b| options[:rubygems] = b }
-  o.on('--npm') { |b| options[:npm] = b }
+
+  o.on('--rubygems')   { |b| options[:rubygems] = b }
+  o.on('--npm')        { |b| options[:npm] = b }
+  o.on('--json')       { |b| options[:json] = true }
   o.on('-h', '--help') { puts o; exit }
+
   o.parse!
 end
 
@@ -85,9 +94,9 @@ end
 dir = File.expand_path(path)
 
 unless options[:rubygems] || options[:npm]
-  File.exists?("#{dir}/package.json") ? run_npm(dir) : run_rubygems(dir)
+  File.exists?("#{dir}/package.json") ? run_npm(dir, options) : run_rubygems(dir, options)
 else
-  run_npm(dir) if options[:npm]
-  run_rubygems(dir) if options[:rubygems]
+  run_npm(dir, options)      if options[:npm]
+  run_rubygems(dir, options) if options[:rubygems]
 end
 
