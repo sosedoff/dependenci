@@ -33,7 +33,7 @@ status = Dependenci.npm(package_json)
 
 Example output:
 
-```json
+```ruby
 {
   "runtime" => [{
     "name" => "coffee-script",
